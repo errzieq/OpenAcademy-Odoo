@@ -133,6 +133,7 @@ class CustomerPortal(CustomerPortal):
         # return request.render("sale.portal_my_quotations", values)
         return request.render("openacademy.portal_my_home_menu_contact_sessions", values)
 
+
     @http.route(['/my/session/<int:session_id>'], type='http', auth="public", website=True)
     def portal_session_page(self, session_id, report_type=None, access_token=None, message=False, download=False, **kw):
         try:
@@ -202,3 +203,4 @@ class CustomerPortal(CustomerPortal):
         # values.update(get_records_pager(history, order_sudo))
 
         return request.render('openacademy.res_partner_portal_template', values)
+#vffffff
