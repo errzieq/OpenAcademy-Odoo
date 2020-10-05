@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_invoice_test" inherit_id="account.report_invoice_document">
+            <xpath expr="//div[@id='qrcode']" position="after">
+
+                    <table class="table table-sm o_main_table" name="invoice_line_table">
+                        <thead>
+                        <tr style="font-weight:bold;">
+                            <th>Session</th>
+                            <th>Debit</th>
+                            <th>Credit</th>
+                        </tr>
+                        <t t-foreach="o.invoice_line_ids" t-as="invoices">
+                        <tr>
+                            <td><span t-field="invoices.name"/></td>
+                            <td><span t-field="invoices.debit"/></td>
+                            <td><span t-field="invoices.credit"/></td>
+                        </tr>
+                        </t>
+                        </thead>
+                    </table>
+
+
+            </xpath>
+        </template>
+    </data>
+</odoo>

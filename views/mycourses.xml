@@ -1,0 +1,11 @@
+<odoo>
+    <template id="my_courses" name="Mycourses" inherit_id="portal.portal_my_home" priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="after">
+            <t t-if="counts" t-call="portal.portal_docs_entry">
+                <t t-set="title">Invoices For User connected </t>
+                <t t-set="url" t-value="'/my/course'"/>
+                <t t-set="count" t-value="my_courses"/>
+            </t>
+        </xpath>
+    </template>
+</odoo>

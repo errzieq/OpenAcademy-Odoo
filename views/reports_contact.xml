@@ -1,0 +1,50 @@
+<odoo>
+
+    <report
+        id="report_contact"
+        model="res.partner"
+        string="Contact Report"
+        name="openacademy.report_contact_view"
+        file="openacademy.report_contact"
+        report_type="qweb-pdf" />
+
+    <template id="report_contact_view">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <center><h3>This Is Report For Contact <h4 t-field="doc.name"/></h3></center>
+                        <h3>Information :</h3>
+                        <table border="1" style="width:100%;">
+                        <tr style="font-weight:bold;">
+                            <th>Country</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Website</th>
+                            <th>Language</th>
+                        </tr>
+                        <tr>
+                            <td><span t-field="doc.country_id"/></td>
+                            <td><span t-field="doc.phone"/></td>
+                            <td><span t-field="doc.email"/></td>
+                            <td><span t-field="doc.website"/></td>
+                            <td><span t-field="doc.lang"/></td>
+                        </tr>
+                        </table>
+                        <ul>
+                            <br/><br/>
+                            <t t-foreach="doc.session_ids" t-as="session">
+                                <p>Session : Name : <span t-field="session.name"/>, Duration : <span t-field="session.duration"/>, PU :<span t-field="session.pu"/></p>
+                                <t t-foreach="doc.session_ids.attendee_ids" t-as="attendees">
+                                    <li>Attendee Name : <span t-field="attendees.display_name"/></li>
+                                </t>
+                                <br/><br/>
+                            </t>
+                        </ul>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
