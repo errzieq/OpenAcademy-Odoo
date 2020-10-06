@@ -114,7 +114,7 @@ class Session(models.Model):
                                 ondelete='cascade', string="Course", required=True)
 
     sessions_ids = fields.Many2one('openacademy.department',
-                                 ondelete='cascade', string="Department", required=True)
+                                 ondelete='cascade', string="Department", )
 
     department_id = fields.Many2many('openacademy.department', string="Department", required=True)
 

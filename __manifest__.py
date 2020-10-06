@@ -38,7 +38,8 @@
         'views/report_invoice.xml',
         'views/action_order.xml',
         # 'views/portal.xml',
-        'views/session_templates.xml'
+        'views/session_templates.xml',
+        'views/create_session.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

@@ -57,12 +57,27 @@
     </template>
 
  <template id="res_partner_portal_template" name="Session Portal Template" inherit_id="portal.portal_sidebar" primary="True">
+
+
         <xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
 <!--            <t t-set="o_portal_fullwidth_alert" groups="sales_team.group_sale_salesman">-->
 <!--                <t t-call="portal.portal_back_in_edit_mode">-->
 <!--                    <t t-set="backend_url" t-value="'/web#model=%s&amp;id=%s&amp;action=%s&amp;view_type=form' % (session_sudo._name, session_sudo.id, action.id)"/>-->
 <!--                </t>-->
 <!--            </t>-->
+            <div id="wrap" class="container">
+                <div class="row mb16">
+                    <div class="oe_structure" id="oe_structure_website_helpdesk_team_1"/>
+                    <div class="col-md-9">
+                        <h2 class="o_page_header mt0 d-none" id="team-page"/>
+                    </div>
+                    <div class="col-md-3" id="right-column">
+                        <div class="oe_structure" id="oe_structure_website_helpdesk_team_2"/>
+
+                    </div>
+                </div>
+            </div>
+
 
             <div class="row mt16 o_portal_sale_sidebar">
                 <!-- Sidebar -->
@@ -104,7 +119,29 @@
                         </ul>
                     </t>
                 </t>
-
+                <t>
+                        <t>
+                            <div class="btn-group btn-block mb16" style="margin-top: 2em">
+                                <a id="submit-ticket" t-attf-href="/my/session/create">
+                                 <button t-attf-class="btn btn-primary #{'col-md-10' if multi_type else 'col-md-12'}">Create session</button>
+                                </a>
+                            </div>
+                        </t>
+                    <t>
+                            <div class="btn-group btn-block mb16" style="margin-top: 2em">
+                                <a id="update-ticket" t-attf-href="/my/session/update">
+                                 <button t-attf-class="btn btn-primary #{'col-md-10' if multi_type else 'col-md-12'}">Update session</button>
+                                </a>
+                            </div>
+                        </t>
+                        <t>
+                            <div class="btn-group btn-block mb16">
+                                <a id="submit-ticket" t-attf-href="/my/session">
+                                 <button t-attf-class="btn btn-primary #{'col-md-10' if multi_type else 'col-md-12'}">View my sessions</button>
+                                </a>
+                            </div>
+                        </t>
+                </t>
                 <!-- Page content -->
 <!--                <div id="quote_content" class="col-12 col-lg justify-content-end">-->
 
@@ -523,4 +560,161 @@
 
 <!--        </div>-->
 <!--    </template>-->
+
+
+    <template id="session_submit" name="Submit a session">
+        <t t-set="request" t-value="default_values.get('request')"/>
+        <t name="Session" priority="29" t-name="openacademy.session">
+            <t t-call="website.layout">
+                <t t-set="additional_title">Session</t>
+                <div id="wrap" class="oe_structure oe_empt">
+                    <div class="container">
+                        <div class="row">
+                            <section id="forms" class="col-12">
+
+
+                                <span class="hidden" data-for="session_form" />
+                                <form id="openacademy_session_form" action="/website_form/" method="post" class="s_website_form container-fluid mt32" enctype="multipart/form-data" data-model_name="openacademy.session" data-editable-form="false"  hide-change-model="true">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <div class="form-group row form-field o_website_form_required">
+                                        <div class="col-lg-3 col-md-4 text-right">
+                                            <label class="col-form-label" for="name">Name</label>
+                                        </div>
+                                        <div class="col-lg-7 col-md-8">
+                                            <input type="text" class="form-control o_website_form_input" name="name" required="1"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row form-field o_website_form_required">
+                                        <div class="col-lg-3 col-md-4 text-right">
+                                            <label class="col-form-label" for="duration">Duration</label>
+                                        </div>
+                                        <div class="col-lg-7 col-md-8">
+                                            <input type="number" class="form-control o_website_form_input" name="duration" required="1"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row form-field">
+                                        <div class="col-lg-3 col-md-4 text-right">
+                                            <label class="col-form-label" for="pu">Prix Unitaire</label>
+                                        </div>
+                                        <div class="col-lg-7 col-md-8">
+                                            <input type="number" class="form-control o_website_form_input" name="pu" required="1"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row form-field">
+                                        <div class="col-lg-3 col-md-4 text-right">
+                                            <label class="col-form-label" for="instructor_id">Instructor</label>
+                                        </div>
+                                        <div class="col-lg-7 col-md-8">
+                                            <input type='text' class='form-control o_website_form_input' name="instructor_id" value="#{instructor}" required="1"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row form-field ">
+                                        <div class="col-lg-3 col-md-4 text-right">
+                                            <label class="col-form-label" for="start_date">Start Date</label>
+                                        </div>
+                                        <div class="col-lg-7 col-md-8">
+                                            <input type='date' class='form-control o_website_form_input' name="start_date" value="{start_date}" required="1"/>
+                                        </div>
+                                    </div>
+
+<!--                                    <div class="form-group row form-field d-none">-->
+<!--                                        <div class="col-lg-3 col-md-4">-->
+<!--                                            <label class="col-form-label" for="team_id">Team</label>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-lg-7 col-md-8">-->
+<!--                                            <input type="hidden" class="form-control o_website_form_input" name="team_id"/>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+                                    <div class="form-group row">
+                                        <div class="offset-lg-3 offset-md-4 col-md-8 col-lg-7">
+                                            <button type="submit" class="btn btn-primary btn-lg o_website_form_send o_default_snippet_text">Envoyer</button>
+                                            <span id="o_website_form_result"></span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+        <template id="session_update" name="Update a session">
+<!--        <t t-set="request" t-value="default_values.get('request')"/>-->
+        <t name="Session" priority="29" t-name="openacademy.session">
+            <t t-call="website.layout">
+                <t t-set="additional_title">Session</t>
+                <div id="wrap" class="oe_structure oe_empt">
+                    <div class="container">
+                        <div class="row">
+                            <section id="forms" class="col-12">
+
+
+                                <span class="hidden" data-for="session_form" />
+                                <form id="openacademy_session_form_update" action="/website_form_update/" method="post" class="s_website_form container-fluid mt32" enctype="multipart/form-data" data-model_name="openacademy.session" data-editable-form="false"  hide-change-model="true">
+<!--                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>-->
+                                    <div class="form-group row form-field o_website_form_required">
+                                        <div class="col-lg-3 col-md-4 text-right">
+                                            <label class="col-form-label" for="name">Name</label>
+                                        </div>
+                                        <div class="col-lg-7 col-md-8">
+                                            <input type="text" class="form-control o_website_form_input" name="name" required="1"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row form-field o_website_form_required">
+                                        <div class="col-lg-3 col-md-4 text-right">
+                                            <label class="col-form-label" for="duration">Duration</label>
+                                        </div>
+                                        <div class="col-lg-7 col-md-8">
+                                            <input type="number" class="form-control o_website_form_input" name="duration" required="1"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row form-field">
+                                        <div class="col-lg-3 col-md-4 text-right">
+                                            <label class="col-form-label" for="pu">Prix Unitaire</label>
+                                        </div>
+                                        <div class="col-lg-7 col-md-8">
+                                            <input type="number" class="form-control o_website_form_input" name="pu" required="1"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row form-field">
+                                        <div class="col-lg-3 col-md-4 text-right">
+                                            <label class="col-form-label" for="instructor_id">Instructor</label>
+                                        </div>
+                                        <div class="col-lg-7 col-md-8">
+                                            <input type='text' class='form-control o_website_form_input' name="instructor_id" value="#{instructor}" required="1"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row form-field ">
+                                        <div class="col-lg-3 col-md-4 text-right">
+                                            <label class="col-form-label" for="start_date">Start Date</label>
+                                        </div>
+                                        <div class="col-lg-7 col-md-8">
+                                            <input type='date' class='form-control o_website_form_input' name="start_date" value="{start_date}" required="1"/>
+                                        </div>
+                                    </div>
+
+<!--                                    <div class="form-group row form-field d-none">-->
+<!--                                        <div class="col-lg-3 col-md-4">-->
+<!--                                            <label class="col-form-label" for="team_id">Team</label>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-lg-7 col-md-8">-->
+<!--                                            <input type="hidden" class="form-control o_website_form_input" name="team_id"/>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+                                    <div class="form-group row">
+                                        <div class="offset-lg-3 offset-md-4 col-md-8 col-lg-7">
+                                            <button type="submit" class="btn btn-primary btn-lg o_website_form_send o_default_snippet_text">Envoyer</button>
+                                            <span id="o_website_form_result"></span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
 </odoo>

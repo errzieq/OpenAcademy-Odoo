@@ -10,6 +10,8 @@ from odoo.addons.portal.controllers.mail import _message_post_helper
 from odoo.addons.portal.controllers.portal import CustomerPortal, pager as portal_pager, get_records_pager
 from odoo.osv import expression
 from pprint import pprint
+from datetime import timedelta, date
+from odoo.addons.website_form.controllers.main import WebsiteForm
 
 # class Openacademy(http.Controller):
 #     @http.route('/openacademy/openacademy/', auth='public')
@@ -203,4 +205,50 @@ class CustomerPortal(CustomerPortal):
         # values.update(get_records_pager(history, order_sudo))
 
         return request.render('openacademy.res_partner_portal_template', values)
-#vffffff
+
+class WebsiteForm(WebsiteForm):
+
+    @http.route("/my/session/create", type='http', auth="public", website=True)
+    def create_session(self, **kwargs):
+        default_values = {}
+        default_values['start_date'] = date.today()
+        default_values['request'] = request
+        default_values['instructor'] = request.env.user.partner_id.id
+        users = request.env['res.partner'].sudo().search([])
+        pprint(users.ids)
+        return request.render("openacademy.session_submit", {'default_values': default_values})
+
+    @http.route('/website_form/<string:model_name>', type='http', auth="public", methods=['POST'], website=True)
+    def website_form(self, model_name, **kwargs):
+        session = request.env['openacademy.session'].create({
+            'name': kwargs['name'],
+            'start_date': date.today(),
+            'pu': kwargs['pu'],
+            'duration': kwargs['duration']
+        })
+
+        pprint(session)
+
+        return super(WebsiteForm, self).website_form(model_name, **kwargs)
+
+    @http.route("/my/session/update", type='http', auth="public", website=True)
+    def update_session(self, **kwargs):
+        default_values = {}
+        default_values['start_date'] = date.today()
+        default_values['request'] = request
+        default_values['instructor'] = request.env.user.partner_id.id
+        users = request.env['res.partner'].sudo().search([])
+        pprint(request.env.user.partner_id.id)
+        return request.render("openacademy.session_update", {'default_values': default_values})
+
+    @http.route('/website_form_update/<string:model_name>', type='http', auth="public", methods=['POST'], website=True, csrf=False)
+    def website_form_update(self, model_name, **kwargs):
+        employee = request.env['openacademy.session'].search([('name', '=', kwargs['name'])], limit=1)
+        employee.write({
+            'name': kwargs['name'],
+            'start_date': date.today(),
+            'pu': kwargs['pu'],
+            'duration': kwargs['duration']
+        })
+
+        return super(WebsiteForm, self).website_form(model_name, **kwargs)
