@@ -7,7 +7,7 @@
             <field name="arch" type="xml">
                 <form string="Course Form">
                     <sheet>
-                        <group>
+                        <group string="Informations">
                             <field name="name"/>
                             <field name="responsible_id"/>
                             <field name="department_id"/>
@@ -89,12 +89,11 @@
         <!-- the following menuitem should appear *after*
              its parent openacademy_menu and *after* its
              action course_list_action -->
-        <menuitem id="courses_menu" name="Courses" parent="openacademy_menu"
+        <menuitem id="courses_menu" name="Courses" parent="openacademy_menu" sequence="1"
                   action="course_list_action"/>
         <!-- Full id location:
              action="openacademy.course_list_action"
              It is not required when it is the same module -->
-
 
         <!-- session form view -->
         <record model="ir.ui.view" id="session_form_view">
@@ -103,6 +102,11 @@
             <field name="arch" type="xml">
                 <form string="Session Form">
                     <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="course_list" type="object" icon="fa-book">
+                                <field string="Courses" name="course_count" widget="statinfo"/>
+                            </button>
+                        </div>
                         <group>
                             <group string="General">
                                 <field name="course_id" />
@@ -120,6 +124,8 @@
                         </group>
                         <label for="attendee_ids"/>
                         <field name="attendee_ids"/>
+                        <label for="department_id"/>
+                        <field name="department_id"/>
                     </sheet>
                 </form>
             </field>
@@ -179,7 +185,9 @@
             <field name="model">openacademy.session</field>
             <field name="arch" type="xml">
                 <graph string="Participations by Courses">
-                    <field name="course_id"/>
+<!-- wqa3 moxkil d groub_by o store=true eliha commentaitom-->
+<!--                    <field name="course_id"/>-->
+                    <field name="instructor_id"/>
                     <field name="attendees_count" type="measure"/>
                 </graph>
             </field>
@@ -189,7 +197,8 @@
             <field name="name">session.kanban</field>
             <field name="model">openacademy.session</field>
             <field name="arch" type="xml">
-                <kanban default_group_by="course_id">
+                <!-- wqa3 moxkil d groub_by course_id eliha commentaita-->
+                <kanban default_group_by="instructor_id"> <!--default_group_by="course_id"-->
                     <field name="color"/>
                     <templates>
                         <t t-name="kanban-box">
@@ -242,7 +251,7 @@
                   action="session_list_action"/>
 
             <!-- session form view -->
-        <record model="ir.ui.view" id="session_form_view">
+        <record model="ir.ui.view" id="department_form_view">
             <field name="name">department.form</field>
             <field name="model">openacademy.department</field>
             <field name="arch" type="xml">
@@ -273,7 +282,7 @@
         </record>
 
         <!-- session tree/list view -->
-        <record model="ir.ui.view" id="session_tree_view">
+        <record model="ir.ui.view" id="department_tree_view">
             <field name="name">department.tree</field>
             <field name="model">openacademy.department</field>
             <field name="arch" type="xml">
@@ -350,7 +359,8 @@
             <field name="model">openacademy.report</field>
             <field name="arch" type="xml">
                 <pivot string="Report">
-                    <field name="courseid" type="measure"/>
+                    <field name="instru" type="row"/>
+                    <field name="course_name" type="col"/>
                 </pivot>
             </field>
         </record>

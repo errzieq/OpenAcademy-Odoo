@@ -4,18 +4,52 @@
             <field name="name">OpenAcademy / Manager</field>
         </record>
 
-        <record id="only_responsible_can_modify" model="ir.rule">
-            <field name="name">Only Responsible can modify Course</field>
+        <record id="group_chef" model="res.groups">
+            <field name="name">OpenAcademy / Chef Department</field>
+        </record>
+
+<!--        <record id="only_responsible_can_modify" model="ir.rule">-->
+<!--            <field name="name">Only Responsible can modify Course</field>-->
+<!--            <field name="model_id" ref="model_openacademy_course"/>-->
+<!--            <field name="groups" eval="[(4, ref('openacademy.group_manager'))]"/>-->
+<!--            <field name="perm_read" eval="0"/>-->
+<!--            <field name="perm_write" eval="1"/>-->
+<!--            <field name="perm_create" eval="0"/>-->
+<!--            <field name="perm_unlink" eval="1"/>-->
+<!--            <field name="domain_force">-->
+<!--                ['|', ('responsible_id','=',False),-->
+<!--                      ('responsible_id','=',user.id)]-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="only_chef_can_add_course" model="ir.rule">
+            <field name="name">Only Responsible Or Chef Can Modify Course</field>
             <field name="model_id" ref="model_openacademy_course"/>
-            <field name="groups" eval="[(4, ref('openacademy.group_manager'))]"/>
+            <field name="groups" eval="[(4, ref('openacademy.group_chef'))]"/>
             <field name="perm_read" eval="0"/>
             <field name="perm_write" eval="1"/>
             <field name="perm_create" eval="0"/>
-            <field name="perm_unlink" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
             <field name="domain_force">
                 ['|', '|', ('responsible_id','=',False),
                       ('responsible_id','=',user.id),
-                      ('chef_id','=',user.id)]
+                      ('chef_department','=',user.id)]
+<!--                      ('chef_department','=',False),-->
+
+            </field>
+        </record>
+
+        <record id="only_chef_can_modify" model="ir.rule">
+            <field name="name">Only Chef Can Modify Department</field>
+            <field name="model_id" ref="model_openacademy_department"/>
+            <field name="groups" eval="[(4, ref('openacademy.group_chef'))]"/>
+            <field name="perm_read" eval="0"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="domain_force">
+                ['|',('chef_id','=',False),
+                     ('chef_id','=',user.name)]
             </field>
         </record>
 </odoo>

@@ -34,7 +34,7 @@
                   parent="main_openacademy_menu"/>
 
         <menuitem id="contact_menu" name="Contacts"
-                  parent="configuration_menu"
+                  parent="main_openacademy_menu"
                   action="contact_list_action"/>
 
         <record model="ir.actions.act_window" id="contact_cat_list_action">

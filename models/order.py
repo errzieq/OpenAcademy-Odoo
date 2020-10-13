@@ -17,10 +17,11 @@ class order(models.Model):
 
         #peut grouper ici order_line des costumers et supprimer filtrage lambda (demain)
 
-        for i in self.partner_id:
-            pprint(i)
+        for i in self.partner_id: #self is here sale.order
+            pprint(self.id) #self.partner_id = res.partner(2,) et self.env.uid = 2 or self.partner_id.id = 2
             lines = []
-            for session in self.order_line.filtered(lambda x: x.order_id.partner_id.id == i.id):
+            for session in self.order_line.filtered(lambda x: x.order_id.partner_id.id == i.id): #x is like order_line
+                pprint(session.order_id)
                 line = {
                     'name': session.name,
                     'quantity': session.product_uom_qty,

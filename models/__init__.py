@@ -3,3 +3,4 @@
 from . import models
 from . import partner
 from . import order
+from . import employee
