@@ -33,14 +33,14 @@ from odoo.osv.expression import AND
 #             'object': obj
 #         })
 
-class CustomerPortal(CustomerPortal):
+class sessionPortal(CustomerPortal):
 
     def _prepare_portal_layout_values(self):
-        values = super(CustomerPortal, self)._prepare_portal_layout_values()
+        values = super(sessionPortal, self)._prepare_portal_layout_values()
         return values
 
     def _prepare_home_portal_values(self):
-        values = super(CustomerPortal, self)._prepare_home_portal_values()
+        values = super(sessionPortal, self)._prepare_home_portal_values()
         partner = request.env.user.partner_id
 
         # SaleOrder = request.env['sale.order']
@@ -250,8 +250,8 @@ class CustomerPortal(CustomerPortal):
         pprint(users.ids)
         return request.render("openacademy.session_submit", default_values)
 
-    @http.route('/website_form/<string:model_name>', type='http', auth="public", methods=['POST'], website=True)
-    def website_form(self, model_name, **kwargs):
+    @http.route('/website_form_create', type='http', auth="public", methods=['POST'], website=True)
+    def website_form_create(self, access_token=None, **kwargs):
         users = request.env['res.partner'].sudo().search([('name', '=', kwargs['instructor'])])
 
         pprint(users)
@@ -264,7 +264,7 @@ class CustomerPortal(CustomerPortal):
         })
 
         pprint(session)
-        return local_redirect("/my/session" % session.id)
+        return local_redirect("/my/session/%d" % session.id)
         # return super(WebsiteForm, self).website_form(model_name, **kwargs)
 
     @http.route("/my/session/update/<int:session_id>", type='http', auth="public", website=True)
@@ -285,6 +285,7 @@ class CustomerPortal(CustomerPortal):
             users_name.append(i.name)
 
         valuess = {
+            'session_id': session_id,
             'start_date': date.today(),
             'instructor': request.env.user.partner_id.id,
             'user': user,
@@ -296,9 +297,9 @@ class CustomerPortal(CustomerPortal):
 
         return request.render("openacademy.session_update", valuess)
 
-    @http.route(['/website_form_update/<string:model_name>'], type='http', auth="public", methods=['POST'], website=True, csrf=False)
-    def website_form_update(self, model_name, **kwargs):
-        employee = request.env['openacademy.session'].search([('name', '=', kwargs['name'])], limit=1)
+    @http.route(['/website_form_update'], type='http', auth="public", methods=['POST'], website=True, csrf=False)
+    def website_form(self, access_token=None, **kwargs):
+        employee = request.env['openacademy.session'].search([('id', '=', kwargs['x'])])
         users = request.env['res.partner'].sudo().search([('name', '=', kwargs['instructor'])])
         pprint(users)
         employee.write({
@@ -308,6 +309,15 @@ class CustomerPortal(CustomerPortal):
             'duration': kwargs['duration'],
             'instructor_id': users.id
         })
-        pprint(employee)
+        print(employee.name)
         return local_redirect("/my/session")
+        # return request.render("openacademy.session_submited", {})
         # return super(WebsiteForm, self).website_form(model_name, **kwargs)
+
+    @http.route(['/delete_session'], type='http', auth="public", methods=['POST'], website=True, csrf=False)
+    def website_form(self, access_token=None, **kwargs):
+        record_delete = request.env['openacademy.session'].search([('id', '=', kwargs['id'])])
+        print(record_delete)
+        record_delete.unlink()
+
+        return local_redirect("/my/session")

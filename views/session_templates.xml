@@ -40,6 +40,7 @@
                         <th class="text-right">Prix Unitaire</th>
                         <!--                        <th class="text-center"/>-->
                         <th class="text-right">Seats</th>
+                        <th class="text-right">Delete</th>
                     </tr>
                 </thead>
                 <t t-foreach="sessions" t-as="session">
@@ -64,6 +65,22 @@
                         <!--                        </td>-->
                         <td class="text-right">
                             <span t-field="session.seats"/>
+                        </td>
+                        <td>
+<!--                            <a id="update-ticket" t-attf-href="/my/session/delete">-->
+<!--                                <button t-attf-class="oe_stat_button btn btn-primary #{'col-md-12'}"-->
+<!--                                        t-att-value="session.id">-->
+<!--                                    Delete-->
+<!--                                </button>-->
+<!--                            </a>-->
+                            <form method="post"
+                                  class="s_website_form"
+                                  action="/delete_session"
+                                  enctype="multipart/form-data">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <input type="hidden" name="id" t-att-value="session.id"/>
+                                    <button type="submit" class="btn btn-primary">Delete</button>
+                            </form>
                         </td>
                     </tr>
                 </t>
@@ -551,7 +568,7 @@
     <!--                                            <span>&amp;nbsp;<span>on</span>&amp;nbsp;<t t-esc="amount_by_group[2]" t-options='{"widget": "monetary", "display_currency": sale_order.pricelist_id.currency_id}'/></span>-->
     <!--                                        </td>-->
     <!--                                        <td class="text-right">-->
-    <!--                                            <span t-esc="amount_by_group[1]"-->super(WebsiteForm, self).website_form(model_name, **kwargs)
+    <!--                                            <span t-esc="amount_by_group[1]"-->
     <!--                                                t-options='{"widget": "monetary", "display_currency": sale_order.pricelist_id.currency_id}'/>-->
     <!--                                        </td>-->
     <!--                                    </t>-->
@@ -615,10 +632,9 @@
 
 
                                 <span class="hidden" data-for="session_form"/>
-                                <form id="openacademy_session_form" action="/website_form/" method="post"
-                                      class="s_website_form container-fluid mt32" enctype="multipart/form-data"
-                                      data-model_name="openacademy.session" data-editable-form="false"
-                                      hide-change-model="true">
+                                <form t-attf-action="/website_form_create" method="post" role="form" name="create_session"
+                                      class="o_wprofile_editor_form js_website_submit_form" enctype="multipart/form-data">
+
                                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                                     <div class="form-group row form-field o_website_form_required">
                                         <div class="col-lg-3 col-md-4 text-right">
@@ -710,12 +726,11 @@
 
 
                                 <span class="hidden" data-for="session_form"/>
-                                <form id="openacademy_session_form_update" action="/website_form_update/" method="post"
-                                      class="s_website_form container-fluid mt32" enctype="multipart/form-data"
-                                      data-model_name="openacademy.session" data-editable-form="false"
-                                      hide-change-model="true">
-                                    <!--                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>-->
+                                <form t-attf-action="/website_form_update" method="post" role="form" name="update_session"
+                                      class="o_wprofile_editor_form js_website_submit_form" enctype="multipart/form-data">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
+                                    <input type="hidden" name="x" t-att-value="session_id"/>
                                     <div class="form-group row form-field o_website_form_required">
                                         <div class="col-lg-3 col-md-4 text-right">
                                             <label class="col-form-label" for="name">Name</label>
@@ -793,5 +808,17 @@
                 </div>
             </t>
         </t>
+    </template>
+        <template id="openacademy.session_submited" name="Session Received">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <div class="container">
+                    <div clas="row">
+                        <h1 class="text-center"><i class="fa fa-check-circle fa-2x text-success" role="img" aria-label="Success" title="Success"/></h1>
+                        <h1 class="text-center">Thank you for submitting your issue, our team will get right on it!</h1>
+                    </div>
+                </div>
+            </div>
+         </t>
     </template>
 </odoo>

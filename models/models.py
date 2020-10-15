@@ -276,8 +276,10 @@ class Report(models.Model):
         CREATE OR REPLACE VIEW openacademy_report AS (
         Select row_number() over() as id, d.id as courseid, d.name as course_name, d.responsible_id as responsible,r.id as sessionsid , r.name as session_name, r.instructor_id as instru
         from openacademy_course as d
+        join openacademy_course_openacademy_session_rel l
+        on d.id = l.openacademy_course_id
         join openacademy_session as r
-        on r.course_id = d.id
+        on r.id = l.openacademy_session_id
         )""")
         # self._cr.execute("""
         # CREATE OR REPLACE VIEW openacademy_report2 AS (

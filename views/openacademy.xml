@@ -110,7 +110,7 @@
                         <group>
                             <group string="General">
                                 <field name="course_id" />
-                                <field name="name"/>
+                                <field name="name" /> <!--attrs="{'invisible':[('active', '!==', True)]}"-->
                                 <field name="instructor_id"/>
                                 <field name="active"/>
                             </group>
